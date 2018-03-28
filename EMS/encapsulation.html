@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>邮件查询</title>
+		<style type="text/css">
+			#container{
+				width: 400px;
+				height: 500px;
+				background: lightgreen;
+				margin: 20px auto;
+				overflow-x: hidden;
+				overflow-y: scroll;
+			}
+			#head{
+				padding: 10px;
+				text-align: center;
+			}
+			li{
+				list-style: none;
+			}
+			#info{
+				background: lightblue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id="head">
+				<input type="text" value="" id="code"/>
+				<input type="button" value="查询" id="btn" />
+			</div>
+			<div id="info"></div>
+		</div>
+		<script type="text/javascript">
+			
+			var btn=document.getElementById("btn");
+			
+			function createXhr(){
+				var xhr=null;
+				if(window.XMLHttpRequest){
+					xhr=new XMLHttpRequest;
+				}else{
+					xhr=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				return xhr;
+			}
+			
+			
+			function ajax(data){
+				var xhr=createXhr();
+				var type=data.type=='get'?'get':'post';
+				var async=data.async=='true'?'true':'false';
+				var url='';
+				var param=data.param;
+				if(data.url){
+					url=data.url;
+				}
+				if(type=='get'){
+					url=url+"?"+param;
+				}
+				if(type=='post'){
+					xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+				}
+				xhr.open(type,url,async);
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4){
+						if(xhr.status==200){
+							var data=JSON.parse(xhr.responseText);
+							if(typeof data.success =='function'){
+								data.success(data);
+							}else if(typeof data.error==='function'){
+								data.error();
+							}
+						}
+					}
+				}
+				xhr.send(param);
+			}
+
+
+			btn.onclick=function(){
+				var code=document.getElementById("code").value;
+				ajax({
+					type:"get",
+					async:"true",
+					url:"EMS.php",
+					param:"code="+code,
+					success:function(data){
+						console.log(data)
+						if(data.status!=0){
+								document.getElementById("info").innerHTML=data.msg;
+							}else{
+								var result=data.data.info.context;
+								console.log(result);
+								var tag='';
+								for(var i=0;i<result.length;i++){
+									var item=result[i];
+									var desc=item.desc;
+									var t=new Date();
+									t.setTime(item.time+'000');
+									var str=t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDay()+'日'
+										+(t.getHours()>12?'下午':'上午')+t.getHours()%12+":"+t.getMinutes()+":"+t.getSeconds();
+									tag+='<li><div>'+str+'</div><div>'+desc+"</div></li>";
+								}
+								var ul=document.createElement('ul');
+								ul.innerHTML=tag;
+								document.getElementById("info").appendChild(ul);
+							}
+					},
+					error:function(){
+						console.log('error');
+					}
+				});
+			}
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bookstore>
+	<book>
+		<name>三国演义</name>
+		<category>文学</category>
+		<desc>描述</desc>
+	</book>	
+	<book>
+		<name>水浒传</name>
+		<category>文学</category>
+		<desc>草寇or英雄豪杰</desc>
+	</book>	
+	<book>
+		<name>西游记</name>
+		<category>文学</category>
+		<desc>妖魔鬼怪牛鬼蛇神什么都有</desc>
+	</book>	
+	<book>
+		<name>红楼梦</name>
+		<category>文学</category>
+		<desc>宝哥哥与林妹妹的爱情史</desc>
+	</book>	
+</bookstore>

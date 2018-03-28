@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ajax实现登入</title>
+		<script src="Login.js"></script>
+	</head>
+	<body>
+		<div id="showInfo"></div>
+		<form id="form">
+			UserName<input type="text" id="username" />
+			<br />
+			Password<input type="password" id="password" />
+			<br />
+			<input type="button" value="Login" id="btn" />
+		</form>
+		<script type="text/javascript">
+			var btn=document.getElementById("btn");
+			btn.onclick=function(){
+				var username11=document.getElementById("username").value;
+				var password11=document.getElementById("password").value;
+				var data='username='+username11+"&password="+password11;
+				ajax1('Login.php','get',data,true,function(response){
+					if(response==1){
+						document.getElementById("showInfo").innerHTML='Login successed!';
+					}else{
+						document.getElementById("showInfo").innerHTML='Login failed!';
+					}
+				},function(){
+					document.getElementById("showInfo").innerHTML="服务器错误！"
+				});
+			}
+			
+//			btn.onclick=function(){
+//				var username11=document.getElementById("username").value;
+//				var password11=document.getElementById("password").value;
+//				var data='username='+username11+"&password="+password11;
+//				ajax2({
+//					"type":"get",
+//					"url":"Login.php",
+//					"data":data,
+//					"async":'true',
+//					"success":function(response){
+//						console.log(response);
+//						if(response==1){
+//							document.getElementById("showInfo").innerHTML="Login successed!";
+//						}else{
+//							document.getElementById("showInfo").innerHTML="Login failed!";
+//						}
+//					},
+//					"error":function(e){
+//						console.log("服务器端错误！");
+//					}
+//				})
+//			}
+		</script>
+	</body>
+</html>

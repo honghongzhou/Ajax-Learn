@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<input type="button" id="btn" value="json" />
+		<script type="text/javascript">
+			window.onload=function(){
+				var bnt=document.getElementById("btn");
+				btn.onclick=function(){
+					var param='{"username":"Mike","age":12}';
+					var xhr=null;
+					if(window.XMLHttpRequest){
+						xhr=new XMLHttpRequest;
+					}else{
+						xhr=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					
+					var url="json.php?user="+param;
+					/*post method*/
+//					var url="json.php"; 
+					xhr.open('get',url,true);
+					
+//					xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+					
+					xhr.onreadystatechange=function(){
+						if(xhr.readyState==4){
+							if(xhr.status==200){
+								var data=JSON.parse(xhr.responseText);
+								console.log(data.username);
+								console.log(data.age);
+							}else{
+								console.log('error')
+							}
+						}
+					}
+					/*post method*/
+//					var param='{"username":"Mike","age":12}';
+//					xhr.sen("user="+param)
+					xhr.send(null);
+					}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ajax请求xml数据</title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		
+	</head>
+	<body>
+		<input type="button" value="click" id="btn"/>
+		<div>
+			<table id="bookInfo">
+				
+			</table>
+		</div>
+		<script type="text/javascript">
+			$(function(){
+				$("#btn").click(function(){
+					$.ajax({
+						type:"get",
+						url:"./data.xml",
+						async:true,
+						success:function(data){
+							console.log(data);
+							var bookstore=data.getElementsByTagName('bookstore');
+							var books=bookstore[0].getElementsByTagName('book');
+							console.log(books);
+							var str='';
+//							console.log(getNodeText(books[0].getElementsByTagName("name")[0])) //三国演义
+							for(var i=0;i<books.length;i++){
+								var book=books[i];
+								var name=book.getElementsByTagName("name")[0];
+								var category=book.getElementsByTagName("category")[0];
+								var desc=book.getElementsByTagName("desc")[0];
+								str+='<tr><td>'+getNodeText(name)+'</td><td>'+getNodeText(category)+'</td><td>'+getNodeText(desc)+'</td></tr>';
+							}
+							var tbody=$('<tbody></tbody>');
+							tbody.append(str);
+//							var tbody=document.createElement('tbody');
+//							tbody.innerHTML=str;
+							$('#bookInfo').append(tbody);
+						},
+						error:function(e){
+							console.log(e);
+						}
+					});
+				})
+				
+				//获取文本节点内容
+			    function getNodeText(node){
+			    	if(window.ActiveXObject){//IE
+			    		return node.text;
+			    	}else{//标准浏览器
+			    		if(node.nodeType == 1){
+			    			return node.textContent;
+			    		}
+			    	}
+    }
+				
+			})
+			
+		</script>
+	</body>
+</html>

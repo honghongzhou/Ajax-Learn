@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>菜谱</title>
+		<style type="text/css">
+			#menu{
+				width: 500px;
+			}
+			.all{
+				margin-top: 30px;
+			}
+			.xh{
+				float: left;
+				color: red;
+				margin-right: 20px;
+				font-style: italic;
+				font-size: 30px;
+			}
+		</style>
+		
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		</script>
+		<script type="text/javascript">
+			$(function(){
+				$("#btn").click(function(){
+					var txt=$("#txt").val();
+					$("#menu").text("正在拼命加载中。。。");
+					
+					$.ajax({
+						type:"get",
+						url:"http://apis.juhe.cn/cook/query?key=03981026be0522e9a4d4c6ed99625aba&rn=3&pn=0&dtype=jsonp&menu="+txt,
+						dataType:"jsonp",
+						async:true,
+						success:function(data){
+							$("#menu").html("");
+							if(data.resultcode!=200){
+								$("#menu").text("sorry,there is no result!");
+								return;
+							}
+							
+							var menus=data.result.data;
+							for(var i=0;i<menus.length;i++){
+								
+								var menu=menus[i];
+								
+								var all=$('<div class="all"></div>');
+								$("#menu").append(all);
+								
+								var title=$('<h2>'+menu.title+'</h2>');
+								all.append(title);
+								
+								var intro=$('<p class="intro">'+menu.imtro+'</p>')
+								all.append(intro);
+								
+								for(var j=0;j<menu.albums.length;j++){
+									var album=menu.albums[i];
+									var pic=$('<img src="'+album+'"/>');
+									all.append(pic);
+								}
+								
+								var zl=$('<p class="zl">'+menu.ingredients+'</p>');
+								all.append(zl);
+								
+								var fl=$('<p class="fl">'+menu.burden+'</p>');
+								all.append(fl);
+								
+								var steps=$('<div class="steps"></div>')
+								all.append(steps);
+								
+								for(var k=0;k<menu.steps.length;k++){
+									var step=menu.steps[k];
+									
+									var xh=$('<em class="xh">'+(k+1)+'.</em>')
+									steps.append(xh);
+									
+									var c=$('<div class="c"></div>')
+									steps.append(c);
+									
+									var p1=$('<p>'+step.step+'</p>');
+									c.append(p1);
+									
+									var p2=$('<p><img src="'+step.img+'"/></p>');
+									c.append(p2);
+									
+									}
+								all.append("<hr/>");
+								
+							}
+						},
+						error:function(){
+							$("#menu").text("error!");
+						}
+					});
+				});
+			});
+		</script>
+		
+	</head>
+	<body>
+		<input type="text" name="txt" id="txt" />
+		<input type="button" value="搜索" id="btn" />
+		<div id="menu"></div>
+	</body>
+</html>

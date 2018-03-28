@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ajax请求json数据</title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		
+	</head>
+	<body>
+		<input type="button" value="click" id="btn"/>
+		<div>
+			<table id="bookInfo">
+				
+			</table>
+		</div>
+		<script type="text/javascript">
+//			var btn=document.getElementById("btn");
+//			btn.onclick=function(){
+//				var xhr=null;
+//				if(window.XMLHttpRequest){
+//					xhr=new XMLHttpRequest;
+//				}else{
+//					xhr=new ActiveXObject("Microsoft.XMLHTTP");
+//				}
+//				var url="./数据.json";
+//				xhr.open('get',url,true);
+//				xhr.onreadystatechange=function(){
+//					if(xhr.readyState==4){
+//						if(xhr.status==200){
+//							var data=JSON.parse(xhr.responseText);
+//							console.log(data);
+//							var str='';
+//							for(var i=0;i<data.total;i++){
+//								str+="<tr><td>"+data.data[i].name+"</td><td>"+data.data[i].category
+//								+"</td><td>"+data.data[i].desc+"</td></tr>";
+//							}
+//							var tbody=document.createElement("tbody");
+//							tbody.innerHTML=str;
+//							document.getElementById("bookInfo").appendChild(tbody);
+//						}
+//					}
+//				}
+//				xhr.send(null);
+//			}
+			
+			$(function(){
+				
+				$("#btn").click(function(){
+					$.ajax({
+						type:"get",
+						url:"./数据.json",
+						async:true,
+						success:function(data){
+							console.log(data);
+							var str="";
+							for(var i=0;i<data.total;i++){
+								str+="<tr><td>"+data.data[i].name+"</td><td>"+data.data[i].category+"</td><td>"+data.data[i].desc+"</td></tr>";
+								
+							}
+							var tbody=document.createElement("tbody");
+							tbody.innerHTML=str;
+							$("#bookInfo").append(tbody);
+						},
+						error:function(e){
+							console.log(e);
+						}
+					});
+				})
+			})
+			
+		</script>
+	</body>
+</html>

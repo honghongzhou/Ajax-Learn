@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ajax实现登入</title>
+	</head>
+	<body>
+		<div id="showInfo"></div>
+		<form id="form">
+			UserName<input type="text" id="username" />
+			<br />
+			Password<input type="password" id="password" />
+			<br />
+			<input type="button" value="Login" id="btn" />
+		</form>
+		<script type="text/javascript">
+			var btn=document.getElementById("btn");
+			btn.onclick=function(){
+				var username11=document.getElementById("username").value;
+				var password11=document.getElementById("password").value;
+				/*创建一个对象*/
+				var xhr=null;
+				if(window.XMLHttpRequest){
+					xhr=new XMLHttpRequest;
+				}else{
+					xhr=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				/*准备工作*/
+				/*get request*/
+//				var url="./login.php?username="+username11+"&password="+password11;
+//				xhr.open('get',url,true);
+				/*post request*/
+				var url="./login.php";
+				xhr.open('post',url,true);
+				xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+				var param="username="+username11+"&password="+password11;
+				xhr.send(param);
+				
+				/*这段代码在执行完send之后进行*/
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4){
+						if(xhr.status==200){
+							var data=xhr.responseText;
+							if(data==1){
+								document.getElementById("showInfo").innerHTML="Login Successed!";
+							}else{
+								document.getElementById("showInfo").innerHTML="username or password error!";
+							}
+						}
+					}
+				}
+				/*正真去做事*/
+				/*get request*/
+//				xhr.send(null);
+				
+			}
+		</script>
+	</body>
+</html>

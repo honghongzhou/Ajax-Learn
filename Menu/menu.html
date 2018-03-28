@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>输入菜名显示菜单</title>
+		<style type="text/css">
+			
+		</style>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<input type="text" value="" id="text"/>
+		<input type="button" value="search" id="btn"/>
+		<div id="menu">
+			
+		</div>
+		<script type="text/javascript">
+			$(function(){
+				$('#btn').click(function(){
+					var text=$('#text').val();
+					$('#menu').text("正在拼命加载中.....");
+					$.ajax({
+						type:"get",
+						url:"http://apis.juhe.cn/cook/query?key=03981026be0522e9a4d4c6ed99625aba&menu="+text+"&rn=10&pn=3",
+						dataType:'jsonp',
+						async:true,
+						success:function(data){
+							$('#menu').html("");
+							if(data.resultcode!=200){
+								$('#menu').text("Sorry!there is no result!");
+								return
+							}
+							var result=data.result.data;
+							console.log(result);
+							var tag='';
+							for(var i=0;i<result.length;i++){
+								var item=result[i];
+								tag+='<h2>'+item.title+'</h2>';
+								tag+='<p class="intro">'+item.imtro+'</p>';
+								tag+='<img src='+item.albums[0]+' />';
+								tag+='<p class="zl">主料:'+item.burden+'</p>';
+								tag+='<p class="fl">辅料：'+item.ingredients+'</p>';
+								var div5=$('<div class="all"></div>');
+								div5.append(tag).append('<hr />');
+							}
+							$('#menu').append(div5);
+						}
+					});
+				})
+			})
+		</script>
+	</body>
+</html>

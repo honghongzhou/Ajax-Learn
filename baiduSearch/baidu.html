@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>baiduSearch</title>
+		<style type="text/css">
+			#sug{
+				position: absolute;
+				left: 50%;
+				margin-left: -150px;
+				width: 300px;
+				height: 40px;
+				background: lightgreen;
+				text-align: center;
+			}
+			#sug input{
+				margin-top: 10px;
+			}
+			li{
+				list-style: none;
+			}
+			#list{
+				position: absolute;
+				left: 50%;
+				top: 48px;
+				width: 200px;
+				margin-left: -150px;
+				background: lightblue;
+			}
+			#list ul{
+				padding-left: 0;
+				margin: 0;
+			}
+			#list ul li{
+				line-height: 30px;
+				background: lightgray;
+				padding-left: 10px;
+				cursor: pointer;
+				margin-top: 0;
+			}
+			
+		</style>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div id="sug">
+			<div>
+				<input type="text" value="" id="text"/>
+				<input type="button" value="百度一下" id="btn"/>
+			</div>
+		</div>
+		<div id="list"></div>
+		<script type="text/javascript">
+//			https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=JAVA
+//			&json=1&p=3&sid=&req=2&csor=0&pwd=JAV&cb=jQuery110207289457274361839_152197
+			$(function(){
+				$('#text').keyup(function(e){
+					var kd=$('#text').val();
+					var url='https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+kd;
+					querySUG(url);
+				});
+			});
+			
+			function querySUG(url){
+				$.ajax({
+					type:"get",
+					url:url,
+					async:true,
+					dataType:'jsonp',
+					jsonp:"cb",
+					jsonCallback:"callback",
+					success:function(data){
+						var tag='<ul>';
+						for(var i=0;i<data.s.length;i++){
+							tag+='<li>'+data.s[i]+'</li>';
+						}
+						tag+='</ul>';
+						$('#list').html(tag).show();
+						$('#list').find('li').hover(function(){
+							$(this).css('background','lightblue');
+						},function(){
+							$(this).css('background','lightgray');
+						})
+						return false;
+					},
+					error:function(){
+						console.log('error!');
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

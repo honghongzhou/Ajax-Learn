@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>getCurrentTime</title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<input type="button" value="clickGetTime" id="btn" />
+		<div id="showTime"></div>
+		<script type="text/javascript">
+			$(function(){
+				$('#btn').click(function(){
+					$("#showTime").text("正在拼命为您加载中......");
+					$.ajax({
+						type:"get",
+						url:"time.php",
+						async:true,
+						success:function(data){
+							$('#showTime').text(data);
+						},
+						error:function(){
+							console.log('error!');
+						}
+					});
+				})
+			})
+		</script>
+	</body>
+</html>

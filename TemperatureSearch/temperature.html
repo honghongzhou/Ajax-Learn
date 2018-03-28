@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>天气查询</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#weather{
+				position: absolute;
+				width: 300px;
+				height: 500px;
+				background: lightblue;
+				left: 50%;
+				margin-left: -150px;
+			}
+			#city{
+				margin-left: 93px;
+			    width: 60px;
+			    height: 23px;
+			    margin-top: 10px;
+			}
+			#weather ul{
+				width: 300px;
+				background: lightcyan;
+			}
+			#weatherInfo ul li{
+				list-style: none;
+				line-height: 40px;
+			}
+		</style>
+		
+	</head>
+	<body>
+		<div id="weather">
+			<div>
+				<select id="city">
+					<option value="1">北京</option>
+					<option value="2">上海</option>
+					<option value="3">广州</option>
+					<option value="4">深圳</option>
+				</select>
+				<input type="button" value="查询" id="btn"/>
+			</div>
+			<div id="weatherInfo"></div>
+		</div>
+	</body>
+	
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="template.js"></script>
+	<script type="text/html" id="temp">
+		{{if longitude}}
+			<ul>
+				<li>经度:{{longitude}}</li>
+				<li>纬度:{{latitude}}</li>
+				<li>海拔高度:{{altitude}}</li>
+				<li>天气:{{weather}}</li>
+				<li>温度:{{temp}}</li>
+				<li>最高温度:{{h_tmp}}</li>
+				<li>最低温度:{{l_tmp}}</li>
+				<li>风向:{{WD}}</li>
+				<li>风速:{{WS}}</li>
+				<li>日出时间:{{sunrise}}</li>
+				<li>日落时间:{{sunset}}</li>
+			</ul>
+		{{/if}}
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			
+			$('#city').on('change',function(){
+				$('#weatherInfo').empty();
+			})
+			
+			$('#btn').click(function(){
+				
+				var cityName=$('#city option:selected').text();
+				$.ajax({
+					type:"get",
+					url:"./citycode.php",
+					data:{cityName:cityName},
+					async:true,
+					success:function(data){
+						var cityCode=JSON.parse(data).cityCode;
+						queryWather(cityCode);
+					},
+					error:function(){
+						console.log("error!");
+					}
+				});
+			})
+			
+			function queryWather(cityCode){
+				$.ajax({
+					type:"get",
+					url:"./weather.php",
+					data:{cityCode:cityCode},
+					async:true,
+					success:function(data){
+						var weather=JSON.parse(data).retData;
+						console.log(weather);
+						var html=template('temp',weather);
+						$('#weatherInfo').append(html);
+					},
+					error:function(){
+						console.log('error!');
+					}
+				});
+			}
+		})
+	</script>
+	
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<form>
+			<input type="text" name="username" id="username" />
+			<input type="password" id="password" name="password" />
+			<input type="button" id="btn" value="Login" />
+			<div id="msg"></div>
+		</form>
+		<script type="text/javascript">
+			$(function(){
+				$('#btn').click(function(){
+					var name=$("#username").val();
+					var pwd=$("#password").val();
+					$("#msg").text("正在为您拼命加载中......");
+					$.ajax({
+						type:"post",
+						/*这里的data一定是js对象*/
+						data:{name:name,pwd:pwd},
+						url:"ajaxInJquery1.php",
+						async:true,
+						success:function(data){
+							console.log(data)
+							if(data==1){
+								$("#msg").text("Successed!");
+							}else{
+								$('#msg').text("Failed");
+							}
+						},
+						error:function(){
+							$("#msg").text("服务器error");
+						}
+					});
+				})
+			})
+		</script>
+	</body>
+</html>

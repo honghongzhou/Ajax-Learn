@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>菜谱</title>
+		<style type="text/css">
+			#menu{
+				width: 500px;
+			}
+			.all{
+				margin-top: 30px;
+			}
+			.xh{
+				float: left;
+				color: red;
+				margin-right: 20px;
+				font-style: italic;
+				font-size: 30px;
+			}
+		</style>
+		
+		<script src="jquery-2.2.0.min.js">
+		//拿到的数据接口
+//			http://apis.juhe.cn/cook/query?key=03981026be0522e9a4d4c6ed99625aba&rn=3&pn=0&dtype=jsonp&callback=handle&menu=西红柿
+		</script>
+		<script src="template-native-debug.js"></script>
+		<script id="test" type="text/html">
+			<% for(var i=0;i<data.length;i++) { %>
+				<div class="all">
+					<h2><%= data[i].title %></h2>
+					<p class="intor"><%= data[i].imtro %></p>
+					<% for(var j=0;j<data[i].albums.length;j++) { %>
+						<img src="<%= data[i].albums[j] %>" />
+					<% } %>
+					<p class="zl">主料：<%= data[i].ingredients %></p>
+					<p class="fl">辅料：<%= data[i].burden %></p>
+					<div class="steps">
+						<% for(var k=0;k<data[i].steps.length;k++) { %>
+							<em class="xh"><%= k+1 %>.</em>
+							<div class="c">
+								<p><%= data[i].steps[k].step %></p>
+								<p><img src="<%= data[i].steps[k].img %>"/></p>
+							</div>
+						<% } %>
+					</div>
+				</div>
+				<hr />
+			<% } %>
+		</script>
+		<script type="text/javascript">
+			$(function(){
+				$("#btn").click(function(){
+					var key=$("#txt").val();
+					$.ajax({
+						type:"get",
+						dataType:"jsonp",
+						url:"http://apis.juhe.cn/cook/query?key=03981026be0522e9a4d4c6ed99625aba&rn=3&pn=0&dtype=jsonp&callback=handle&menu="+key,
+						async:true,
+						success:function(data){
+							$("#menu").html("");
+							if(data.resultcode!=200){
+								$("#menu").text("对不起，没有查询结果！")
+							}
+							var html=template('test',data.result);
+							$("#menu").html(html);
+							
+						},
+						error:function(){
+							$("#menu").text("服务器出现错误！");
+						}
+					});
+				});
+			})
+		</script>
+	</head>
+	<body>
+		<input type="text" name="txt" id="txt" />
+		<input type="button" value="搜索" id="btn" />
+		<div id="menu"></div>
+	</body>
+</html>

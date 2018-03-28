@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>邮件查询</title>
+		<style type="text/css">
+			#container{
+				width: 400px;
+				height: 500px;
+				background: lightgreen;
+				margin: 20px auto;
+				overflow-x: hidden;
+				overflow-y: scroll;
+			}
+			#head{
+				padding: 10px;
+				text-align: center;
+			}
+			li{
+				list-style: none;
+			}
+			#info{
+				background: lightblue;
+			}
+		</style>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div id="container">
+			<div id="head">
+				<input type="text" value="" id="code"/>
+				<input type="button" value="查询" id="btn" />
+			</div>
+			<div id="info"></div>
+		</div>
+		<script type="text/javascript">
+			var btn=document.getElementById("btn");
+			btn.onclick=function(){
+				var code=document.getElementById("code").value;
+				var xhr=null;
+				if(window.XMLHttpRequest){
+					xhr=new XMLHttpRequest;
+				}else{
+					xhr=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				var url="EMS.php?code="+code;
+				xhr.open('get',url,true);
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4){
+						if(xhr.status==200){
+							var data=JSON.parse(xhr.responseText);
+							if(data.status!=0){
+								document.getElementById("info").innerHTML=data.msg;
+							}else{
+								var result=data.data.info.context;
+								console.log(result);
+								var tag='';
+								for(var i=0;i<result.length;i++){
+									var item=result[i];
+									var desc=item.desc;
+									var t=new Date();
+									t.setTime(item.time+'000');
+									var str=t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDay()+'日'
+										+(t.getHours()>12?'下午':'上午')+t.getHours()%12+":"+t.getMinutes()+":"+t.getSeconds();
+									tag+='<li><div>'+str+'</div><div>'+desc+"</div></li>";
+								}
+								var ul=document.createElement('ul');
+								ul.innerHTML=tag;
+								document.getElementById("info").appendChild(ul);
+							}
+							
+						}
+					}
+				}
+				xhr.send(null);
+				
+			}
+		</script>
+		<!--<script type="text/javascript">
+			
+			$(function(){
+				$('#btn').click(function(){
+					var code=$('#code').val();
+					$.ajax({
+						type:"get",
+						url:"EMS.php",
+						data:{code:code},
+						async:true,
+						success:function(data){
+							var data=JSON.parse(data);
+							if(data.status!=0){
+								$('#info').text(data.msg);
+							}else{
+								var result=data.data.info.context;
+								console.log(result);
+								var tag='';
+								for(var i=0;i<result.length;i++){
+									var item=result[i];
+									var desc=item.desc;
+									var t=new Date();
+									t.setTime(item.time+'000');
+									var str=t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDay()+'日'
+										+(t.getHours()>12?'下午':'上午')+t.getHours()%12+":"+t.getMinutes()+":"+t.getSeconds();
+									tag+='<li><div>'+str+'</div><div>'+desc+"</div></li>";
+								}
+								var ul=$('<ul></ul>');
+								ul.append(tag)
+								$('#info').append(ul);
+								
+							}
+						},
+						error:function(){
+							console.log('error!');
+						}
+					});
+				});
+			})
+		</script>-->
+	</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ajax提交form</title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div id="loginInfo">
+			<div id="showInfo"></div>
+			<form action="form.php" method="post" target="iframe">
+				Username:<input type="text" name='username'/>
+				<br />
+				Password:<input type="text" name="password" />
+				<br />
+				Age:<input type="text" name="age" />
+				<br />
+				<input type="submit" value="submit" id="btn" />
+			</form>
+		</div>
+		
+		<iframe width="200" height="110" frameborder="0" name="myframe"></iframe>
+		
+	</body>
+</html>
